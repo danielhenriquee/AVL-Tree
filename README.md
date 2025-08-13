@@ -5,7 +5,7 @@ This repository contains a generic (template-based) implementation of an AVL Tre
 Its main goal is to serve as educational material for studying balanced tree structures, as well as a reusable base for academic projects that require efficient insertion, removal, and search operations.
 
 **Contents**
-- avlTree.h — AVL Tree definition and implementation
+- avlTree.h - AVL Tree definition and implementation
 - test.cpp - main testing all features implementeds
 
 **Features**
