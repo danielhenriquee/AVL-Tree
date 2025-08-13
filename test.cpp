@@ -1,6 +1,5 @@
 #include <iostream>
-#include <limits>
-#include "AVL_TREE.h"
+#include "avlTree.h"
 
 using namespace std;
 
@@ -51,18 +50,30 @@ int main() {
                 cin >> key;
                 value = AVL_searchData(tree.root, key);
                 cout << "Value found: " << value << endl;
+                cout << "Type any character to return to the menu...";
+                cin.ignore();
+                cin.get();
                 break;
             case 4: // Print in-order
                 cout << "Tree in-order: ";
                 AVL_printTree(tree.root);
                 cout << endl;
+                cout << "Type any character to return to the menu...";
+                cin.ignore();
+                cin.get();
                 break;
             case 5: // Show tree sideways
                 cout << "AVL Tree structure:\n";
                 AVL_showTree(tree.root, 0);
+                cout << "Type any character to return to the menu...";
+                cin.ignore();
+                cin.get();
                 break;
             case 6: // Tree size
                 cout << "Tree size: " << AVL_size(tree.root) << endl;
+                cout << "Type any character to return to the menu...";
+                cin.ignore();
+                cin.get();
                 break;
             case 7: // Check key
                 cout << "Enter a key to check: ";
@@ -71,6 +82,9 @@ int main() {
                     cout << "Key exists in the tree." << endl;
                 else
                     cout << "Key does not exist." << endl;
+                cout << "Type any character to return to the menu...";
+                cin.ignore();
+                cin.get();
                 break;
             case 8: // Reset tree
                 AVL_destroyTree(tree.root);
@@ -81,6 +95,9 @@ int main() {
                 break;
             default:
                 cout << "Invalid choice!\n";
+                cout << "Type any character to return to the menu...";
+                cin.ignore();
+                cin.get();
                 break;
         }
     }
