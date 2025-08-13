@@ -20,6 +20,7 @@ Its main goal is to serve as educational material for studying balanced tree str
 - Memory management (AVL_destroyTree)
 
 **Usage**
+
 Include the header file in your C++ project and create an AVL_TBinaryTree<T> object with your desired type T.
 You can then use the provided functions to insert, remove, search, and display tree contents while ensuring automatic balancing.
 
