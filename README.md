@@ -1,4 +1,4 @@
-# AVL-Tree
+# AVL Tree
 AVL Tree implementation created at Data Structures - 2024/1
 
 This repository contains a generic (template-based) implementation of an AVL Tree — a self-balancing binary search tree that maintains a height difference of at most one between its subtrees.
