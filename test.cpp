@@ -32,73 +32,80 @@ int main() {
 
         int key, value, choice;
         cin >> choice;
-        switch(choice) {
-            case 1: // Insert
-                cout << "Enter a key: ";
-                cin >> key;
-                cout << "Enter a value: ";
-                cin >> value;
-                AVL_insert(tree.root, key, value);
-                break;
-            case 2: // Remove
-                cout << "Enter a key to remove: ";
-                cin >> key;
-                AVL_remove(tree.root, key);
-                break;
-            case 3: // Search
-                cout << "Enter a key to search: ";
-                cin >> key;
-                value = AVL_searchData(tree.root, key);
-                cout << "Value found: " << value << endl;
-                cout << "Type any character to return to the menu...";
-                cin.ignore();
-                cin.get();
-                break;
-            case 4: // Print in-order
-                cout << "Tree in-order: ";
-                AVL_printTree(tree.root);
-                cout << endl;
-                cout << "Type any character to return to the menu...";
-                cin.ignore();
-                cin.get();
-                break;
-            case 5: // Show tree sideways
-                cout << "AVL Tree structure:\n";
-                AVL_showTree(tree.root, 0);
-                cout << "Type any character to return to the menu...";
-                cin.ignore();
-                cin.get();
-                break;
-            case 6: // Tree size
-                cout << "Tree size: " << AVL_size(tree.root) << endl;
-                cout << "Type any character to return to the menu...";
-                cin.ignore();
-                cin.get();
-                break;
-            case 7: // Check key
-                cout << "Enter a key to check: ";
-                cin >> key;
-                if (AVL_contains(tree.root, key))
-                    cout << "Key exists in the tree." << endl;
-                else
-                    cout << "Key does not exist." << endl;
-                cout << "Type any character to return to the menu...";
-                cin.ignore();
-                cin.get();
-                break;
-            case 8: // Reset tree
-                AVL_destroyTree(tree.root);
-                AVL_boot(tree);
-                break;
-            case 9: // Quit
-                menu = false;
-                break;
-            default:
-                cout << "Invalid choice!\n";
-                cout << "Type any character to return to the menu...";
-                cin.ignore();
-                cin.get();
-                break;
+        try {
+            switch(choice) {
+                case 1: // Insert
+                    cout << "Enter a key: ";
+                    cin >> key;
+                    cout << "Enter a value: ";
+                    cin >> value;
+                    AVL_insert(tree.root, key, value);
+                    break;
+                case 2: // Remove
+                    cout << "Enter a key to remove: ";
+                    cin >> key;
+                    AVL_remove(tree.root, key);
+                    break;
+                case 3: // Search
+                    cout << "Enter a key to search: ";
+                    cin >> key;
+                    value = AVL_searchData(tree.root, key);
+                    cout << "Value found: " << value << endl;
+                    cout << "Type any character to return to the menu...";
+                    cin.ignore();
+                    cin.get();
+                    break;
+                case 4: // Print in-order
+                    cout << "Tree in-order: ";
+                    AVL_printTree(tree.root);
+                    cout << endl;
+                    cout << "Type any character to return to the menu...";
+                    cin.ignore();
+                    cin.get();
+                    break;
+                case 5: // Show tree sideways
+                    cout << "AVL Tree structure:\n";
+                    AVL_showTree(tree.root, 0);
+                    cout << "Type any character to return to the menu...";
+                    cin.ignore();
+                    cin.get();
+                    break;
+                case 6: // Tree size
+                    cout << "Tree size: " << AVL_size(tree.root) << endl;
+                    cout << "Type any character to return to the menu...";
+                    cin.ignore();
+                    cin.get();
+                    break;
+                case 7: // Check key
+                    cout << "Enter a key to check: ";
+                    cin >> key;
+                    if (AVL_contains(tree.root, key))
+                        cout << "Key exists in the tree." << endl;
+                    else
+                        cout << "Key does not exist." << endl;
+                    cout << "Type any character to return to the menu...";
+                    cin.ignore();
+                    cin.get();
+                    break;
+                case 8: // Reset tree
+                    AVL_destroyTree(tree.root);
+                    AVL_boot(tree);
+                    break;
+                case 9: // Quit
+                    menu = false;
+                    break;
+                default:
+                    cout << "Invalid choice!\n";
+                    cout << "Type any character to return to the menu...";
+                    cin.ignore();
+                    cin.get();
+                    break;
+            }
+        }   catch (const exception& e) {
+            cout << "\nError: " << e.what() << endl;
+            cout << "Press any key to return to the menu...";
+            cin.ignore();
+            cin.get();
         }
     }
 
