@@ -32,7 +32,7 @@ void AVL_boot(AVL_TBinaryTree<T> &tree) {
 
 // Returns AVL tree height
 template <typename T>
-int height(TBinaryNode<T>* node) {
+int height(AVL_TBinaryNode<T>* node) {
     if (!node) // If nullptr
         return 0;
     int hl = height(node->left); 
@@ -45,12 +45,12 @@ int height(TBinaryNode<T>* node) {
 
 // Update node's balance factor
 template <typename T>
-void updateBalanceFactor (TBinaryNode<T>* node) {
+void updateBalanceFactor (AVL_TBinaryNode<T>* node) {
     if (!node) // If nullptr
         return;
     int hl = height(node->left); // Calculates left subtree height
     int hr = height(node->right); // Calculates right subtree height
-    n->balance = hl - hr // Balance factor = left height - right height 
+    node->balance = hl - hr; // Balance factor = left height - right height 
 }
 
 // Balance case: Left-Left
@@ -163,7 +163,9 @@ bool AVL_insert(AVL_TBinaryNode<T> *&node, int key, T data) {
         node->right = nullptr;
         node->left = nullptr;
         return true;
-        
+    }  
+    
+    // Navigate to correct position
     if (key < node->key) {
         if (!AVL_insert(node->left, key, data))
             return false;
@@ -182,66 +184,59 @@ bool AVL_insert(AVL_TBinaryNode<T> *&node, int key, T data) {
 
 // Search to return data
 template <typename T>
-T AVL_searchData(AVL_TBinaryNode<T> *&node, int key) {
-    if (node != nullptr) {
-        if (node->key == key) {
-            return node->data;
-        } else {
-            if (key > node->key)
-                AVL_searchData(node->right, key);
-            else {
-                if (key < node->key)
-                    AVL_searchData(node->left, key);
-            }
-        }
-    }
-    throw std::underflow_error("Error: empty stack.");
+T AVL_searchData(AVL_TBinaryNode<T> *node, int key) {
+    if (!node)
+        throw std::out_of_range("Error: key not found.");
+    if (key == node->key)
+        return node->data;
+    if (key < node->key)
+        return AVL_searchData(node->left, key);
+    else
+        return AVL_searchData(node->right, key);
 }
 
 // AVL_remove node
 template <typename T>
-void AVL_remove (AVL_TBinaryNode<T> *&node) {
-    AVL_TBinaryNode<T> *exclude; // Pointer which is gonna be the node AVL_removed
-    AVL_TBinaryNode<T> *greater = node->left; // Saves left element of node that gonna be AVL_removed
-    if (greater == nullptr) { // Check if there isn't node in the left
-        exclude = node;
-        node = node->right;
-        delete exclude;
-        return;
-    }
-    AVL_TBinaryNode<T> *parent = nullptr; // Pointer which saves parent node
-    while (greater->right != nullptr) { // Navigate until reaches most right element of the left side of the node which is gonna be AVL_removed
-        parent = greater; // Saves parente o greater node
-        greater = greater->right;
-    }
-    greater->right = node->right; // Gets the right side of the node which is gonna be AVL_removed
-    if (parent != nullptr) { // Check if there is parent node
-        parent->right = greater->left; // Parent gets left side of the node which is gonna substitute the node which is gonna be AVL_removed
-        greater->left = node->left; // Greater gets left side of the node which is gonna be AVL_removed
-    }
-    exclude = node;
-    node = greater; // Node gets substituted by greater
-    delete exclude; // Node is AVL_removed
-}
+void AVL_remove(AVL_TBinaryNode<T>* &node, int key) {
+    if (!node) // Empty subtree
+        return; 
 
-// Search to AVL_remove
-template <typename T>
-void AVL_searchRemove(AVL_TBinaryNode<T> *&node, int key) {
-    if (node != nullptr) {
-        if (node->key == key) {
-            AVL_remove(node);
-        } else {
-            if (key > node->key)
-                AVL_searchRemove(node->right, key);
-            else {
-                if (key < node->key)
-                    AVL_searchRemove(node->left, key);
-            }
+    if (key < node->key) { // Remove from left subtree
+        AVL_remove(node->left, key);
+    } else if (key > node->key) { // Remove from right subtree
+        AVL_remove(node->right, key);
+    } else { // Node found
+        if (!node->left) { // No left child, replace with right child
+            AVL_TBinaryNode<T>* temp = node;
+            node = node->right;
+            delete temp;
+        } else if (!node->right) { // No right child, replace with left child
+            AVL_TBinaryNode<T>* temp = node;
+            node = node->left;
+            delete temp;
+        } else { // Node has two children: find the largest in left subtree
+            AVL_TBinaryNode<T>* pred = node->left;
+            AVL_TBinaryNode<T>* predParent = node;
+            while (pred->right) {
+                predParent = pred;
+                pred = pred->right;
+            } // Copy predecessor key/data to current node
+            node->key = pred->key;
+            node->data = pred->data;
+    
+            if (predParent->right == pred) // Remove predecessor node
+                predParent->right = pred->left;
+            else
+                predParent->left = pred->left;
+            delete pred;
         }
     }
+
+    if (node) // Rebalance subtree
+        AVL_rebalance(node);
 }
 
-// Print
+// Print tree (ascending by key)
 template <typename T>
 void AVL_printTree(AVL_TBinaryNode<T> *node) {
     if (node != nullptr) {
@@ -251,8 +246,7 @@ void AVL_printTree(AVL_TBinaryNode<T> *node) {
     }
 }
 
-
-// Print
+// Print node with indentation
 template <typename T>
 void AVL_printNode(T k, int b) {
     for (int i = 0; i < b; i++)
@@ -260,7 +254,7 @@ void AVL_printNode(T k, int b) {
     cout << k << endl;
 }
 
-// Print
+// Print tree (sideways visualization)
 template <typename T>
 void AVL_showTree(AVL_TBinaryNode<T> *node, int b) {
     if (node == nullptr) {
@@ -271,3 +265,56 @@ void AVL_showTree(AVL_TBinaryNode<T> *node, int b) {
     AVL_printNode(node->key, b);
     AVL_showTree(node->left, b+2);
 }
+
+// Delete tree
+template <typename T>
+void AVL_destroyTree(AVL_TBinaryNode<T>* &node) {
+    if (!node)
+        return;
+    AVL_destroyTree(node->left);
+    AVL_destroyTree(node->right);
+    delete node;
+    node = nullptr;
+}
+
+// Min node
+template <typename T>
+AVL_TBinaryNode<T>* AVL_min(AVL_TBinaryNode<T>* node) {
+    if (!node) 
+        return nullptr;
+    while (node->left)
+        node = node->left;
+    return node;
+}
+
+// Max node
+template <typename T>
+AVL_TBinaryNode<T>* AVL_max(AVL_TBinaryNode<T>* node) {
+    if (!node) 
+        return nullptr;
+    while (node->right)
+        node = node->right;
+    return node;
+}
+
+// Check if tree contains key
+template <typename T>
+bool AVL_contains(AVL_TBinaryNode<T>* node, int key) {
+    if (!node) 
+        return false;
+    if (key == node->key) 
+        return true;
+    if (key < node->key) 
+        return AVL_contains(node->left, key);
+    return AVL_contains(node->right, key);
+}
+
+// Return tree size
+template <typename T>
+int AVL_size(AVL_TBinaryNode<T>* node) {
+    if (!node) 
+        return 0;
+    return 1 + AVL_size(node->left) + AVL_size(node->right);
+}
+
+#endif // AVL_TREE_H
