@@ -4,20 +4,11 @@
 
 using namespace std;
 
-void clearScreen() {
 #ifdef _WIN32
-    system("CLS");
+    #define CLEAR "cls"
 #else
-    system("clear");
+    #define CLEAR "clear"
 #endif
-}
-
-// Pause console (cross-platform)
-void pauseConsole() {
-    cout << "Press Enter to continue...";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    cin.get();
-}
 
 int main() {
     AVL_TBinaryTree<int> tree;
@@ -25,7 +16,7 @@ int main() {
     bool menu = true;
 
     while (menu) {
-        clearScreen();
+        system(CLEAR);
 
         cout << "\n======== AVL Binary Tree =======" << endl;
         cout << "=== 1 -     Insert Node      ===" << endl;
@@ -40,19 +31,8 @@ int main() {
         cout << "================================" << endl;
         cout << "Enter your choice: ";
 
-        int choice;
+        int key, value, choice;
         cin >> choice;
-
-        if(cin.fail()) {  // Validate input
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid input! Please enter a number.\n";
-            pauseConsole();
-            continue;
-        }
-
-        int key, value;
-
         switch(choice) {
             case 1: // Insert
                 cout << "Enter a key: ";
@@ -60,48 +40,30 @@ int main() {
                 cout << "Enter a value: ";
                 cin >> value;
                 AVL_insert(tree.root, key, value);
-                cout << "Node inserted successfully.\n";
-                pauseConsole();
                 break;
-
             case 2: // Remove
                 cout << "Enter a key to remove: ";
                 cin >> key;
                 AVL_remove(tree.root, key);
-                cout << "Node removed (if it existed).\n";
-                pauseConsole();
                 break;
-
             case 3: // Search
                 cout << "Enter a key to search: ";
                 cin >> key;
-                try {
-                    value = AVL_searchData(tree.root, key);
-                    cout << "Value found: " << value << endl;
-                } catch (const out_of_range &e) {
-                    cout << e.what() << endl;
-                }
-                pauseConsole();
+                value = AVL_searchData(tree.root, key);
+                cout << "Value found: " << value << endl;
                 break;
-
             case 4: // Print in-order
                 cout << "Tree in-order: ";
                 AVL_printTree(tree.root);
                 cout << endl;
-                pauseConsole();
                 break;
-
             case 5: // Show tree sideways
                 cout << "AVL Tree structure:\n";
                 AVL_showTree(tree.root, 0);
-                pauseConsole();
                 break;
-
             case 6: // Tree size
                 cout << "Tree size: " << AVL_size(tree.root) << endl;
-                pauseConsole();
                 break;
-
             case 7: // Check key
                 cout << "Enter a key to check: ";
                 cin >> key;
@@ -109,23 +71,16 @@ int main() {
                     cout << "Key exists in the tree." << endl;
                 else
                     cout << "Key does not exist." << endl;
-                pauseConsole();
                 break;
-
             case 8: // Reset tree
                 AVL_destroyTree(tree.root);
                 AVL_boot(tree);
-                cout << "Tree reset successfully." << endl;
-                pauseConsole();
                 break;
-
             case 9: // Quit
                 menu = false;
                 break;
-
             default:
                 cout << "Invalid choice!\n";
-                pauseConsole();
                 break;
         }
     }
