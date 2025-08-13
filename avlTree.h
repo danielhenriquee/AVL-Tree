@@ -45,7 +45,7 @@ int height(AVL_TBinaryNode<T>* node) {
 
 // Update node's balance factor
 template <typename T>
-void updateBalanceFactor (AVL_TBinaryNode<T>* node) {
+void AVL_updateBalanceFactor (AVL_TBinaryNode<T>* node) {
     if (!node) // If nullptr
         return;
     int hl = height(node->left); // Calculates left subtree height
@@ -61,8 +61,8 @@ void LL (AVL_TBinaryNode<T> *&r) {
     b->left = a->right; // Root->left points a->right
     a->right = b; // a->right points to root
     r = a;
-    updateBalanceFactor(a);
-    updateBalanceFactor(b);
+    AVL_updateBalanceFactor(a);
+    AVL_updateBalanceFactor(b);
 }
 
 // Balance case: Right-Right
@@ -73,8 +73,8 @@ void RR (AVL_TBinaryNode<T> *&r) {
     b->right = a->left; // Root->right points a->left
     a->left = b; // a->right points to root
     r = a;
-    updateBalanceFactor(a);
-    updateBalanceFactor(b);
+    AVL_updateBalanceFactor(a);
+    AVL_updateBalanceFactor(b);
 }
 
 // Balance case: Left-Right
